@@ -89,6 +89,10 @@ if(APPLE)
   list(APPEND F3D_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/context_cocoa.mm)
 endif()
 
+if (F3D_MODULE_SPACEMOUSE)
+  list(APPEND F3D_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/spacemouse_impl.cxx)
+endif()
+
 # List of headers that will be installed
 set(F3D_PUBLIC_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/public/animation.h
@@ -237,6 +241,14 @@ endif ()
 # raytracing
 if (F3D_MODULE_RAYTRACING)
   target_compile_definitions(libf3d PRIVATE F3D_MODULE_RAYTRACING)
+endif ()
+
+# spacemouse
+if (F3D_MODULE_SPACEMOUSE)
+  target_compile_definitions(libf3d PRIVATE F3D_MODULE_SPACEMOUSE)
+  # 3DxWare::Navlib has no imported location in the SDK's CMake files, so link the
+  # header target and the TDxNavLib.lib path set by find_package(TDxWare_SDK) instead.
+  target_link_libraries(libf3d PRIVATE 3DxWare::headers ${TDxWare_LIBRARIES})
 endif ()
 
 # ffmpeg

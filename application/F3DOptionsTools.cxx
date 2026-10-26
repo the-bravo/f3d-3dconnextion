@@ -118,6 +118,11 @@ void PrintVersion()
     f3d::log::info("Copyright (C) " + cr + ".");
   }
   f3d::log::info("License " + libInfo.License + ".");
+#if F3D_MODULE_SPACEMOUSE
+  // Attribution required by the 3Dconnexion SDK license
+  f3d::log::info("3D input device development tools and related technology are provided under "
+                 "license from 3Dconnexion. (c) 3Dconnexion 1992 - 2025. All rights reserved.");
+#endif
   f3d::log::setUseColoring(true);
 }
 

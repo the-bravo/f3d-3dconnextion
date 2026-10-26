@@ -110,6 +110,16 @@ option(F3D_MODULE_TINYFILEDIALOGS "tinyfiledialogs module" ON)
 option(F3D_MODULE_CLIP "clip module" ON)
 option(F3D_MODULE_FFMPEG "ffmpeg module" OFF)
 
+# 3Dconnexion SpaceMouse navigation. Needs the 3DxWare SDK, which is not part of this
+# repository (see doc/dev/05-BUILD.md). Point TDxWare_SDK_DIR at the unzipped SDK.
+option(F3D_MODULE_SPACEMOUSE "3Dconnexion SpaceMouse module (needs the 3DxWare SDK)" OFF)
+if(F3D_MODULE_SPACEMOUSE)
+  if(NOT WIN32)
+    message(FATAL_ERROR "F3D_MODULE_SPACEMOUSE is only supported on Windows for now")
+  endif()
+  find_package(TDxWare_SDK CONFIG REQUIRED)
+endif()
+
 # Use externals
 option(F3D_USE_EXTERNAL_CXXOPTS "Use external cxxopts dependency" OFF)
 option(F3D_USE_EXTERNAL_NLOHMANN_JSON "Use external nlohmann_json dependency" OFF)
@@ -348,6 +358,7 @@ f3d_report_variable(F3D_BUILD_APPLICATION)
 f3d_report_variable(F3D_MODULE_EXR)
 f3d_report_variable(F3D_MODULE_FFMPEG)
 f3d_report_variable(F3D_MODULE_RAYTRACING)
+f3d_report_variable(F3D_MODULE_SPACEMOUSE)
 f3d_report_variable(F3D_MODULE_OPENXR)
 f3d_report_variable(F3D_MODULE_UI)
 f3d_report_variable(F3D_MODULE_WEBP)
