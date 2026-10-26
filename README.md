@@ -1,3 +1,30 @@
+# F3D with 3Dconnexion SpaceMouse support
+
+This is a fork of [F3D](https://github.com/f3d-app/f3d) that adds **3Dconnexion SpaceMouse navigation, and nothing else**.
+It is not made or endorsed by the F3D project.
+
+- **Download:** a Windows installer is on the [releases page](https://github.com/the-bravo/f3d-3dconnextion/releases/latest). It includes everything needed; you only need the [3DxWare driver](https://3dconnexion.com/drivers/) that comes with your SpaceMouse.
+- **What it does:** pan, zoom and rotate with the cap, using your speed and axis settings from the 3Dconnexion Settings app (F3D has its own profile there). Rotation pivots around the geometry under the view center or cursor, shown as an orange dot. The standard device buttons (Fit, Top, Front, Right, rotate 90°) work. Normal mouse and keyboard navigation keeps working.
+- **Platform:** Windows only.
+- **AI disclosure:** the SpaceMouse support was implemented with AI (Claude Opus 5.5 in Claude Code). That goes against [F3D's AI policy](AI_POLICY.md), so it will not be submitted to F3D and there are no plans to rewrite it. Feel free to use this fork if you want SpaceMouse support in F3D.
+- **Issues:** please report problems with this fork [here](https://github.com/the-bravo/f3d-3dconnextion/issues), not to the F3D project.
+
+## Building from source
+
+Build F3D as described in the [build guide](doc/dev/05-BUILD.md), with `-DF3D_MODULE_SPACEMOUSE=ON -DTDxWare_SDK_DIR=<path to SDK>`.
+This needs the 3DxWare SDK, which cannot be included in this repository under its license. Get it for free from the [3Dconnexion Software Developer Program](https://3dconnexion.com/software-developer-program/).
+Without the option, the build is the same as upstream F3D.
+
+The changes compared to F3D are in [library/src/spacemouse_impl.cxx](library/src/spacemouse_impl.cxx) and a few small hooks, see [pull request #1](https://github.com/the-bravo/f3d-3dconnextion/pull/1).
+
+## Credits
+
+3D input device development tools and related technology are provided under license from 3Dconnexion. © 3Dconnexion 1992 - 2025. All rights reserved.
+
+---
+
+_The original F3D README follows._
+
 [![CI](https://img.shields.io/github/actions/workflow/status/f3d-app/f3d/ci.yml?label=CI&logo=github)](https://github.com/f3d-app/f3d/actions/workflows/ci.yml) [![Packaging](https://img.shields.io/github/actions/workflow/status/f3d-app/f3d-superbuild/nightly.yml?label=Packaging&logo=github)](https://github.com/f3d-app/f3d-superbuild) [![codecov](https://codecov.io/gh/f3d-app/f3d/branch/master/graph/badge.svg?token=siwG82IXK7)](https://codecov.io/gh/f3d-app/f3d) [![Downloads](https://img.shields.io/github/downloads/f3d-app/f3d/total.svg)](https://github.com/f3d-app/f3d/releases) [![Sponsors](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://f3d.app/thanks) [![Discord](https://discordapp.com/api/guilds/1046005690809978911/widget.png?style=shield)](https://discord.f3d.app) [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
 # F3D - fast and minimalist 3D viewer
