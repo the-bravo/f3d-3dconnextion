@@ -8,6 +8,10 @@
 #include "utils.h"
 #include "window_impl.h"
 
+#if F3D_MODULE_SPACEMOUSE
+#include "spacemouse_impl.h"
+#endif
+
 #include "vtkF3DConsoleOutputWindow.h"
 
 #if F3D_MODULE_UI
@@ -609,6 +613,18 @@ public:
     this->EventLoopObserverId =
       this->VTKInteractor->AddObserver(vtkCommand::TimerEvent, timerCallback);
     timerCallback->SetClientData(this);
+
+#if F3D_MODULE_SPACEMOUSE
+    // SpaceMouse navigation for on-screen Windows windows
+    if (this->Window.getType() == window::Type::WGL)
+    {
+      this->SpaceMouse = std::make_unique<spacemouse_impl>(this->Window, this->Interactor);
+      if (!this->SpaceMouse->Enable())
+      {
+        this->SpaceMouse.reset();
+      }
+    }
+#endif
     return true;
   }
 
@@ -620,6 +636,9 @@ public:
       log::info("Interaction: event loop has not been started hence cannot be stopped");
       return false;
     }
+#if F3D_MODULE_SPACEMOUSE
+    this->SpaceMouse.reset();
+#endif
     this->VTKInteractor->RemoveObserver(this->EventLoopObserverId);
     this->VTKInteractor->DestroyTimer(this->EventLoopTimerId);
     this->EventLoopUserCallback = nullptr;
@@ -666,6 +685,13 @@ public:
     this->Anim.UpdateDynamicOptions();
     this->Anim.SetDeltaTime(deltaTime);
     this->Anim.Tick();
+
+#if F3D_MODULE_SPACEMOUSE
+    if (this->SpaceMouse)
+    {
+      this->SpaceMouse->Tick();
+    }
+#endif
 
     vtkRenderWindow* renWin = this->Window.GetRenderWindow();
     vtkF3DRenderer* ren = vtkF3DRenderer::SafeDownCast(renWin->GetRenderers()->GetFirstRenderer());
@@ -723,6 +749,10 @@ public:
   std::atomic<bool> StopRequested = false;
 
   double CallbackDeltaTime = 1.0 / 30; /* Default DeltaTime (30fps) */
+
+#if F3D_MODULE_SPACEMOUSE
+  std::unique_ptr<spacemouse_impl> SpaceMouse;
+#endif
 
   std::function<bool(const std::string&, const std::string&, const std::string&, double)>
     NotificationCallback = nullptr;

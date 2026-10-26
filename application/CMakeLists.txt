@@ -72,6 +72,11 @@ function(f3d_create_exec target_name)
     target_compile_definitions(${target_name} PRIVATE F3D_MODULE_RAYTRACING)
   endif ()
 
+  # spacemouse
+  if (F3D_MODULE_SPACEMOUSE)
+    target_compile_definitions(${target_name} PRIVATE F3D_MODULE_SPACEMOUSE)
+  endif ()
+
   # exr
   if (F3D_MODULE_EXR)
     target_compile_definitions(${target_name} PRIVATE F3D_MODULE_EXR)
